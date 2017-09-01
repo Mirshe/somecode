@@ -1,0 +1,27 @@
+'use strict'
+const gulp = require("gulp");
+const foos = require("./tasksFoo");
+const bs = require("browser-sync").create();
+
+//gulp.task("lint", foos.lint("./builds/dev/**/*.js", "./builds/prod"));
+// gulp.task("default", gulp.series(build,sync,sass,gitStart),function(){
+// gulp.watch("./builds/dev/**/*.scss", gulp.series(sass));		
+// gulp.watch("./builds/dev/**/*.*", gulp.series(build,gitDo));		
+// bs.watch("./builds/prod").on("change",bs.reload);
+// });
+
+function build(){return foos.build("builds/dev/**/*.*", "builds/prod")};
+function sass(){return foos.sass("builds/dev/**/*.scss", "builds/prod")};
+
+let gitStart = gulp.series(init,add,commit,addremote,push);
+let gitDo = gulp.series(add,commit,push);
+function init(){return foos.init()};
+function add(){return foos.add("./*")};
+function commit(){return foos.commit("./*")};
+function addremote(){return foos.addremote('https://github.com/Mirshe/somecode.git')};
+function push(){return foos.push()};
+	function sync () {
+	bs.init({
+		server: "./builds/prod"
+	});
+};
